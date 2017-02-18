@@ -1,7 +1,7 @@
 import * as React from "react";
 import {render} from "react-dom";
 import {AppContainer} from "react-hot-loader";
-import App from "./components/App";
+import App from "./components/app/App";
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import reducers from "./reducers";
@@ -28,8 +28,8 @@ if (module.hot) {
         store.replaceReducer(nextRootReducer);
     });
 
-    module.hot.accept("./components/App", () => {
-        const NewApp = require("./components/App").default;
+    module.hot.accept("./components/app/App", () => {
+        const NewApp = require("./components/app/App").default;
 
         render(
             <AppContainer>
