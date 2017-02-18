@@ -11,6 +11,7 @@ export default class App extends React.Component<AppProps, undefined> {
     render() {
         return <div className="app">
             ciao
+            { this.props.children }
         </div>;
     }
 }
