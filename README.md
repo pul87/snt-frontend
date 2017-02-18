@@ -1,4 +1,4 @@
-# React Webpack Typescript Starter
+# SNT Frontend
 Minimal starter kit with hot module replacement for fast development.
 
 **Main features**
