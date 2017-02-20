@@ -26,8 +26,9 @@ module.exports = {
     devServer: {
         hot:         true, // enable HMR on the server
         contentBase: resolve(__dirname, "public"), // match the output path
-        publicPath:  "/app", // match the output `publicPath`,
+        publicPath:  "/", // match the output `publicPath`,
         historyApiFallback: true,
+        /*
         setup: function(app){
             app.get('/', function(req, res){
                 fs.readFile(resolve(__dirname,"public","index_frontier.html"),"utf8", function(err, file){
@@ -38,7 +39,7 @@ module.exports = {
                     }
                 });
             })
-        }
+        }*/
     },
 
     module: {
