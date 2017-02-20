@@ -8,13 +8,19 @@ class LoginPage extends Component<undefined, undefined> {
 
     render() {
         return (
-            <div className="login_page fill">
+            <div>
                 <Clearfix />
-                {/*<img className="img" src={require("../../assets/images/laigueglia.jpg")} />*/}
-                <Grid>
-                    <Row>
+                <Grid bsClass="container-fluid">
+                    <Row className="login_page">
                         <Col xs={12}>
-                        Ciao
+                            <Grid>
+                                <Row className="motto">Cambia il modo di <strong>vivere la Liguria.</strong></Row>
+                            </Grid>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xs={12} className="seconda" >
+                            Seconda riga
                         </Col>
                     </Row>
                 </Grid>

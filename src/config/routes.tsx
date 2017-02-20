@@ -9,7 +9,9 @@ import LoggedPage from "../pages/logged_page/LoggedPage";
 
 export default (
     <Route path="/" component={App}>
-        <IndexRoute component={LoginPage} />
-        <Route path="logged" component={LoggedPage}/>
+        <Route path="login" component={LoginPage} />
+        <Route path="app" component={LoggedPage}>
+
+        </Route>
     </Route>
 );
