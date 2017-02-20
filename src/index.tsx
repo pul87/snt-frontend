@@ -5,7 +5,7 @@ import App from "./components/app/App";
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import reducers from "./reducers";
-import { Router, Route, browserHistory, IndexRoute } from "react-router";
+import { Router, browserHistory } from "react-router";
 import routes from "./config/routes";
 const rootEl = document.getElementById("root");
 const createStoreWithMiddleware = applyMiddleware()(createStore);

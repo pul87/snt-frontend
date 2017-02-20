@@ -1,7 +1,8 @@
 const webpack         = require("webpack");
 const {resolve}       = require("path");
 const {CheckerPlugin} = require("awesome-typescript-loader")
-const StyleLintPlugin = require('stylelint-webpack-plugin');
+const StyleLintPlugin = require("stylelint-webpack-plugin");
+const fs              = require("fs");
 
 module.exports = {
     resolve: {
@@ -21,11 +22,23 @@ module.exports = {
 
     context: resolve(__dirname, "src"),
     devtool: "source-map",
-
+    
     devServer: {
         hot:         true, // enable HMR on the server
         contentBase: resolve(__dirname, "public"), // match the output path
-        publicPath:  "/" // match the output `publicPath`
+        publicPath:  "/app", // match the output `publicPath`,
+        historyApiFallback: true,
+        setup: function(app){
+            app.get('/', function(req, res){
+                fs.readFile(resolve(__dirname,"public","index_frontier.html"),"utf8", function(err, file){
+                    if (err) {
+                        res.status(500).send("Errore");
+                    } else {
+                        res.send(file);
+                    }
+                });
+            })
+        }
     },
 
     module: {
