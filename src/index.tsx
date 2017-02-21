@@ -7,6 +7,9 @@ import { Provider } from "react-redux";
 import reducers from "./reducers";
 import { Router, browserHistory } from "react-router";
 import routes from "./config/routes";
+
+require("!style-loader!css-loader!sass-loader!./sass/main.scss");
+
 const rootEl = document.getElementById("root");
 const createStoreWithMiddleware = applyMiddleware()(createStore);
 const store = createStoreWithMiddleware(reducers);

@@ -1,0 +1,24 @@
+/**
+1) abstracts
+2) vendors
+3) base
+4) layout
+5) components
+6) pages
+7) themes
+**/
+
+// 1.0) abstracts
+@import "./abstracts/variables";
+
+// 2.0) vendors
+// 3.0) base
+// 4.0) layout
+// 5.0) components
+@import "./components/app";
+
+// 6.0) pages
+@import "./pages/login-page";
+@import "./pages/home";
+
+// 7.0) themes
