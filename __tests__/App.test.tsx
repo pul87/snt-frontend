@@ -1,16 +1,18 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import * as TestUtils from 'react-addons-test-utils';
-import App from '../src/components/app/App';
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import App from "../src/components/app/App";
+import { shallow } from "enzyme";
+import { ShallowWrapper } from "@types/enzyme";
 
-it('App is rendered', () => {
-    // Render App in the document
-    const appElement: App = TestUtils.renderIntoDocument(
-        <App/>
-    );
-    
-    const appNode = ReactDOM.findDOMNode(appElement);
+let wrapper:ShallowWrapper<any, any>;
 
-    // Verify text content
-    expect(appNode.textContent).toEqual('Hello World!Foo to the barz');
+beforeEach(() => {
+    wrapper = shallow(<App/>);
 });
+
+describe('App', () => {
+    it('Is rendered', () => {
+        expect(wrapper.exists()).toBeTruthy();
+    });
+})
+
