@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
-
+import { intlReducer } from "react-intl-redux";
 const rootReducer = combineReducers({
-    state: ( state = {} ) => state
+    intl: intlReducer
 });
 
 export default rootReducer;
