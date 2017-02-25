@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Component } from "react";
 import { Grid, Row, Col, Clearfix } from "react-bootstrap";
-import { FormattedNumber, FormattedMessage } from "react-intl";
+import { FormattedNumber, FormattedMessage, FormattedHTMLMessage } from "react-intl";
 import { ILocaleStrings }from "../locale";
 
 class LoginPage extends Component<undefined, undefined> {
@@ -14,8 +14,9 @@ class LoginPage extends Component<undefined, undefined> {
                     <Row className="first-row">
                         <Col xs={12}>
                             <Grid>
-                                <Row className="motto">Cambia il modo di <strong>vivere la Liguria.</strong></Row>
-                                <Row><FormattedMessage id="login.greeting"/></Row>>
+                                <Row className="motto">
+                                    <FormattedHTMLMessage id={"login.motto"} defaultMessage={"Cambia il modo di <strong>vivere la Liguria.</strong>"}/> 
+                                </Row>
                             </Grid>
                         </Col>
                     </Row>

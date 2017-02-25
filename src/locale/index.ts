@@ -4,18 +4,15 @@ export interface ILocaleData {
 };
 
 export interface ILocaleStrings {
-    "login.greeting": string;
-    "login.we": string;
+    "login.motto": string;
 }
 
 const locale: ILocaleData = {
     it: {
-        "login.greeting": "Ciao!!!!!!!!!!!!!!!!!!!!!!",
-        "login.we": "Wee",
+        "login.motto": "Cambia il modo di <strong>vivere la Liguria.</strong>",
     },
     en: {
-        "login.greeting": "Hello",
-        "login.we": "weee"
+        "login.motto": "Liguria, <strong>by ligurians.</strong>",
     }
 };
 
