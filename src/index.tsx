@@ -55,7 +55,7 @@ function renderApp(app) {
 // Hot Module Replacement API
 declare let module: {hot: any};
 
-if (module.hot) {
+if (module.hot ) {
 
     module.hot.accept("./locale", () => {
         const { locale, messages } = LocaleUtil.getMessagesByCurrentLocale();
