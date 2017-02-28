@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Component } from "react";
 
-class LoggedPage extends Component<undefined, undefined> {
+class Home extends Component<undefined, undefined> {
 
     render() {
         return (
@@ -12,4 +12,4 @@ class LoggedPage extends Component<undefined, undefined> {
     }
 }
 
-export default LoggedPage;
+export default Home;
