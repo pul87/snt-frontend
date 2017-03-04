@@ -5,3 +5,4 @@ src/**/*.jsx
 __tests__/**/*.jsx
 .DS_Store
 npm-debug.log
+.vscode/
