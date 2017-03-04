@@ -18,8 +18,8 @@ class LoginPage extends Component<undefined, undefined> {
                         <Col sm={12}>
                             <Grid>
                                 <Row className="motto">
-                                    <FormattedHTMLMessage 
-                                        id={"login.motto"} 
+                                    <FormattedHTMLMessage
+                                        id={"login.motto"}
                                         defaultMessage={"Cambia il modo di <strong>vivere la Liguria.</strong>"} /> 
                                 </Row>
                                 <Row>

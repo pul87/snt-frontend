@@ -1,91 +1,115 @@
 import * as React from "react";
 import { Component } from "react";
-import { FormGroup, FormControl, ControlLabel, HelpBlock, Panel,Row, Form, Col, Checkbox, Button } from "react-bootstrap";
-import { FormattedMessage } from "react-intl";
+import { FormGroup, FormControl, ControlLabel, HelpBlock, Panel, Row, Form, Col, Checkbox, Button } from "react-bootstrap";
 
-interface ILoginRegisterFormState {
+export interface ILoginRegisterFormState {
     showLogin: boolean;
-    controlSize: number;
 }
 
-interface ILoginRegisterProps {
+export interface ILoginRegisterProps {
     controlSize?: number;
+    emailText?: string;
+    passwordText?: string;
+    confirmPasswordText?: string;
+    rememberMeText?: string;
+    submitLoginText?: string;
+    submitRegisterText?: string;
+    loginTitle?: string;
+    registerTitle?: string;
+    loginSubmissionFn?(values):{ success:boolean; data: any; };
+    registerSubmissionFn?(values):{ success:boolean; data: any; };
 }
 
-class LoginRegisterForm extends Component<ILoginRegisterProps,ILoginRegisterFormState> {
+class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFormState> {
 
-    constructor(props:ILoginRegisterProps) {
+    static get defaultProps(): ILoginRegisterProps {
+        return {
+            emailText: "Email",
+            passwordText: "Password",
+            confirmPasswordText: "Confirm password",
+            rememberMeText: "Remember me",
+            submitLoginText: "Login",
+            submitRegisterText: "Register",
+            controlSize: 9,
+            loginTitle: "Login",
+            registerTitle: "Register",
+            loginSubmissionFn: (values) => {
+                console.log("Unimplemented LoginFn");
+                return {
+                    success: true,
+                    data: values,
+                };
+            },
+            registerSubmissionFn: (values) => {
+                console.log("Unimplemented RegisterFn");
+                return {
+                    success: true,
+                    data: values,
+                }
+            }
+        };
+    }
+
+    constructor(props: ILoginRegisterProps) {
         super(props);
-        this.state = { showLogin: true, controlSize: props.controlSize ? props.controlSize : 9 };
+
+        this.state = { showLogin: true };
     }
 
-    getLoginForm() {
-        
-        const labelSize = 12 - this.state.controlSize;
-        const controlSize = this.state.controlSize;
+    getForm(isLogin: boolean) {
+
+        const labelSize = 12 - this.props.controlSize;
+        const controlSize = this.props.controlSize;
+        const submitButtonText = isLogin ? this.props.submitLoginText : this.props.submitRegisterText;
+
+        const confirmPassword = ! isLogin ? (
+            <FormGroup controlId="formHorizontalConfirmPassword">
+                <Col componentClass={ControlLabel} sm={labelSize}>
+                    <span className="confirm-password-text">{this.props.confirmPasswordText}</span>
+                </Col>
+                <Col sm={controlSize}>
+                    <FormControl type="password" placeholder="Confirm password" />
+                </Col>
+            </FormGroup>
+        ) : null;
+
         return (
             <Form horizontal>
                 <FormGroup controlId="formHorizontalEmail">
-                    <Col componentClass={ControlLabel} sm={labelSize}>Email</Col>
+                    <Col componentClass={ControlLabel} sm={labelSize}>
+                        <span className="email-text">{this.props.emailText}</span>
+                    </Col>
                     <Col sm={controlSize}>
                         <FormControl type="email" placeholder="Email" />
                     </Col>
                 </FormGroup>
                 <FormGroup controlId="formHorizontalPassword">
-                        <Col componentClass={ControlLabel} sm={labelSize}>Password</Col>
+                    <Col componentClass={ControlLabel} sm={labelSize}>
+                        <span className="password-text">{this.props.passwordText}</span>
+                    </Col>
                     <Col sm={controlSize}>
                         <FormControl type="password" placeholder="Password" />
                     </Col>
                 </FormGroup>
-                <FormGroup>
-                    <Col smOffset={2} sm={4}>
-                        <Checkbox>
-                            <FormattedMessage id={"login-register.remember-me"} defaultMessage={"Ricordami"} />
-                        </Checkbox>
-                    </Col>
-                    <Col sm={5}>
-                        <Button type="submit">
-                            <FormattedMessage id={"login-register.login"} defaultMessage={"Accedi"} />
-                        </Button>
-                    </Col>
-                </FormGroup>
-            </Form>
-        );   
-    }
-
-    getRegisterForm() {
-
-        const labelSize = 12 - this.state.controlSize;
-        const controlSize = this.state.controlSize;
-        return (
-            <Form horizontal>
-                <FormGroup controlId="formHorizontalEmail">
-                    <Col componentClass={ControlLabel} sm={labelSize}>Email</Col>
-                    <Col sm={controlSize}>
-                        <FormControl type="email" placeholder="Email" />
-                    </Col>
-                </FormGroup>
-                <FormGroup controlId="formHorizontalPassword">
-                        <Col componentClass={ControlLabel} sm={labelSize}>Password</Col>
-                    <Col sm={controlSize}>
-                        <FormControl type="password" placeholder="Password" />
-                    </Col>
-                </FormGroup>
-                <FormGroup controlId="formHorizontalConfirmPassword">
-                        <Col componentClass={ControlLabel} sm={labelSize}>Confirm</Col>
-                    <Col sm={controlSize}>
-                        <FormControl type="password" placeholder="Confirm password" />
-                    </Col>
-                </FormGroup>
+                { confirmPassword }
                 <FormGroup>
                     <Col smOffset={6} sm={5}>
-                        <Button type="submit">
-                            <FormattedMessage id={"login-register.register"} defaultMessage={"Registrati"} />
+                        <Button type="submit" onClick={this.onSubmitForm.bind(this)}>
+                            {/*<FormattedMessage id={"login-register.register"} defaultMessage={"Registrati"} />*/}
+                            <span className="submit-register-text">{ submitButtonText }</span>
                         </Button>
                     </Col>
                 </FormGroup>
             </Form>
         );
+    }
+
+    onSubmitForm(e) {
+        e.preventDefault();
+        if ( this.state.showLogin )
+            this.props.loginSubmissionFn({});
+        else
+            this.props.registerSubmissionFn({});
     }
 
     onChangeFormClick(e) {
@@ -94,35 +118,37 @@ class LoginRegisterForm extends Component<ILoginRegisterProps,ILoginRegisterForm
     }
 
     render() {
-       
+
         const showLogin = this.state.showLogin;
-        const title = showLogin ? "login" : "register";
-        const formMode = showLogin ? "Accedi" : "Registrati";
-        const form = showLogin ? this.getLoginForm() : this.getRegisterForm();
+        const formMode = showLogin ? this.props.loginTitle : this.props.registerTitle;
+        const switchFormLink = showLogin ? this.props.submitRegisterText : this.props.submitLoginText;
+        const form = this.getForm(showLogin);
         const panelHeader = (
             <Row>
                 <Col xs={4} >
                     <strong>
-                        <FormattedMessage id={`login-register.${title}`} defaultMessage={formMode} />
+                        {/*<FormattedMessage id={`login-register.${title}`} defaultMessage={formMode} />*/}
+                        <span className="login-register-title">{formMode}</span>
                     </strong>        
                 </Col>
                 <Col xs={2} xsOffset={5} >
                     <small>
-                        <a href="" onClick={ this.onChangeFormClick.bind(this) }>Registrati</a>
+                        <a className="switch-form-link" href="" onClick={ this.onChangeFormClick.bind(this) }>
+                            <span className="switch-form-link">{switchFormLink}</span>
+                        </a>
                     </small>
                 </Col>
-            </Row> 
+            </Row>
          );
-        
+
         return (
             <div className="login-register-form">
                 <Panel header={panelHeader}>
                     { form }
                 </Panel>
             </div>
-        ); 
+        );
     }
 }
-
 
 export default LoginRegisterForm;
