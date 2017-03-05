@@ -4,7 +4,7 @@ import { FormGroup, FormControl, ControlLabel, HelpBlock, Panel, Row, Form, Col,
 
 export interface ILoginRegisterFormState {
     showLogin: boolean;
-    email: string
+    email: string;
     password: string;
     confirmPassword: string;
 }
@@ -19,8 +19,8 @@ export interface ILoginRegisterProps {
     submitRegisterText?: string;
     loginTitle?: string;
     registerTitle?: string;
-    loginSubmissionFn?( email, password ):{ success:boolean; data: any; };
-    registerSubmissionFn?( email, password, confirmPassword ):{ success:boolean; data: any; };
+    loginSubmissionFn?( email, password ): { success: boolean; data: any; };
+    registerSubmissionFn?( email, password, confirmPassword ): { success: boolean; data: any; };
 }
 
 class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFormState> {
@@ -39,7 +39,7 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
             loginSubmissionFn: (email, password) => {
                 console.log("Unimplemented LoginFn");
                 console.log(email, password);
-                
+
                 return {
                     success: true,
                     data: { email, password},
@@ -48,11 +48,11 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
             registerSubmissionFn: (email, password, confirmPassword) => {
                 console.log("Unimplemented RegisterFn");
                 console.log(email, password, confirmPassword);
-                
+
                 return {
                     success: true,
                     data: { email, password, confirmPassword },
-                }
+                };
             },
         };
     }
@@ -80,6 +80,10 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
             </FormGroup>
         ) : null;
 
+        const rememberMe = isLogin ? (
+            <Checkbox>{this.props.rememberMeText}</Checkbox>
+        ) : null;
+
         return (
             <Form horizontal onSubmit={this.onSubmitForm.bind(this)}>
                 <FormGroup controlId="emailGroup">
@@ -87,7 +91,7 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
                         <span className="email-text">{this.props.emailText}</span>
                     </Col>
                     <Col sm={controlSize}>
-                        <FormControl type="email" placeholder="Email" value={this.state.email} onChange={this.onEmailChange.bind(this)}/>
+                        <FormControl type="email" placeholder={this.props.emailText} value={this.state.email} onChange={this.onEmailChange.bind(this)}/>
                     </Col>
                 </FormGroup>
                 <FormGroup controlId="passwordGroup">
@@ -95,14 +99,17 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
                         <span className="password-text">{this.props.passwordText}</span>
                     </Col>
                     <Col sm={controlSize}>
-                        <FormControl type="password" placeholder="Password" value={this.state.password} onChange={this.onPasswordChange.bind(this)}/>
+                        <FormControl type="password" placeholder={this.props.passwordText} value={this.state.password} onChange={this.onPasswordChange.bind(this)}/>
                     </Col>
                 </FormGroup>
+                
                 { confirmPassword }
                 <FormGroup>
-                    <Col smOffset={6} sm={5}>
+                    <Col smOffset={1} sm={4}>
+                        {rememberMe}
+                    </Col>
+                    <Col smOffset={1} sm={5}>
                         <Button type="submit">
-                            {/*<FormattedMessage id={"login-register.register"} defaultMessage={"Registrati"} />*/}
                             <span className="submit-register-text">{ submitButtonText }</span>
                         </Button>
                     </Col>
@@ -130,7 +137,7 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
             this.props.loginSubmissionFn( email, password);
         else
             this.props.registerSubmissionFn(email, password, confirmPassword);
-        
+
         this.setState({email: "", password: "", confirmPassword: ""});
     }
 
@@ -149,7 +156,6 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
             <Row>
                 <Col xs={4} >
                     <strong>
-                        {/*<FormattedMessage id={`login-register.${title}`} defaultMessage={formMode} />*/}
                         <span className="login-register-title">{formMode}</span>
                     </strong>        
                 </Col>

@@ -5,7 +5,7 @@ import { FormattedNumber, FormattedMessage, FormattedHTMLMessage } from "react-i
 import { ILocaleStrings }from "../locale";
 
 // components
-import LoginRegisterForm from "../components/forms/LoginRegisterForm";
+import LoginRegisterFormConnected from "../containers/forms/LoginRegisterFormConnected";
 
 class LoginPage extends Component<undefined, undefined> {
 
@@ -24,7 +24,7 @@ class LoginPage extends Component<undefined, undefined> {
                                 </Row>
                                 <Row>
                                     <Col sm={5} smOffset={6}>
-                                        <LoginRegisterForm />
+                                        <LoginRegisterFormConnected />
                                     </Col>
                                 </Row>
                             </Grid>
