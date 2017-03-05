@@ -2,8 +2,8 @@ import * as React from "react";
 import * as ReactDom from "react-dom";
 import { mount } from "enzyme";
 import { ReactWrapper } from "@types/enzyme";
-import LoginRegisterForm from "../../../src/containers/forms/LoginRegisterForm";
-import { ILoginRegisterProps, ILoginRegisterFormState } from "../../../src/containers/forms/LoginRegisterForm";
+import LoginRegisterForm from "../../../src/components/forms/LoginRegisterForm";
+import { ILoginRegisterProps, ILoginRegisterFormState } from "../../../src/components/forms/LoginRegisterForm";
 
 let wrapper:ReactWrapper<any, any>;
 

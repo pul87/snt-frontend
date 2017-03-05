@@ -5,7 +5,7 @@ import { FormattedNumber, FormattedMessage, FormattedHTMLMessage } from "react-i
 import { ILocaleStrings }from "../locale";
 
 // components
-import LoginRegisterForm from "../containers/forms/LoginRegisterForm";
+import LoginRegisterForm from "../components/forms/LoginRegisterForm";
 
 class LoginPage extends Component<undefined, undefined> {
 
