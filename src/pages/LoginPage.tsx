@@ -24,7 +24,7 @@ class LoginPage extends Component<undefined, undefined> {
                                 </Row>
                                 <Row>
                                     <Col sm={5} smOffset={6}>
-                                        <LoginRegisterForm />   
+                                        <LoginRegisterForm />
                                     </Col>
                                 </Row>
                             </Grid>

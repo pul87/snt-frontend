@@ -3,7 +3,7 @@ import * as ReactDom from "react-dom";
 import { mount } from "enzyme";
 import { ReactWrapper } from "@types/enzyme";
 import LoginRegisterForm from "../../../src/containers/forms/LoginRegisterForm";
-import { ILoginRegisterProps } from "../../../src/containers/forms/LoginRegisterForm";
+import { ILoginRegisterProps, ILoginRegisterFormState } from "../../../src/containers/forms/LoginRegisterForm";
 
 let wrapper:ReactWrapper<any, any>;
 
@@ -17,7 +17,7 @@ describe("LoginRegisterForm", () => {
         expect(wrapper.exists()).toBeTruthy();
     });
 
-    describe("Check props", () => {
+    describe("Check config", () => {
 
         it("Checks defaultProps", () => {
             const wrapperProps:ILoginRegisterProps = wrapper.props();
@@ -58,12 +58,21 @@ describe("LoginRegisterForm", () => {
             expect(wrapperProps.submitLoginText).toEqual("mySubmitLoginText");
             expect(wrapperProps.submitRegisterText).toEqual("mySubmitRegisterText");
         });
+
+        it("Check the initial state", () => {
+            const state:ILoginRegisterFormState = wrapper.state();
+            expect(state.showLogin).toBeTruthy();
+            expect(state.email).toEqual("");
+            expect(state.password).toEqual("");
+            expect(state.confirmPassword).toEqual("");
+        });
     });
 
     describe("LoginForm", () => {
 
         it("Check if the login form is displayed by default", () => {
             expect(wrapper.state().showLogin).toBeTruthy();
+            expect(wrapper.find("form")).toHaveLength(1);
         });
 
         it("Checks the submit button", () => {
@@ -104,32 +113,112 @@ describe("LoginRegisterForm", () => {
         it("Check the Register Form", () => {
             const switchFormLink = wrapper.find("a.switch-form-link");
             switchFormLink.simulate('click');
+            expect(wrapper.find("form")).toHaveLength(1);
             expect(wrapper.find({ type: "password" })).toHaveLength(2);
             expect(wrapper.find({ type: "email" })).toHaveLength(1);
         });
     });
 
     describe("Check form submission", () => {
-        it("Checks LoginForm", () => {
-            const mockLoginFn = jest.fn();
-            const mockRegisterFn = jest.fn();
-            wrapper = mount(<LoginRegisterForm loginSubmissionFn={mockLoginFn} registerSubmissionFn={mockRegisterFn}/>)
-            const submit = wrapper.find("button[type='submit']");
-            submit.simulate("click");
-            expect(mockLoginFn).toHaveBeenCalled();
-            expect(mockRegisterFn).not.toHaveBeenCalled();
-        });
 
-        it("Checks RegisterForm", () => {
-            const mockLoginFn = jest.fn();
-            const mockRegisterFn = jest.fn();
-            wrapper = mount(<LoginRegisterForm loginSubmissionFn={mockLoginFn} registerSubmissionFn={mockRegisterFn}/>)
-            const submit = wrapper.find("button[type='submit']");
-            const switchFormLink = wrapper.find("a.switch-form-link");
-            switchFormLink.simulate("click");
-            submit.simulate("click");
-            expect(mockLoginFn).not.toHaveBeenCalled();
-            expect(mockRegisterFn).toHaveBeenCalled();
+        describe("LoginForm", () => {
+            it("Checks the loginSubmissionFn function call", () => {
+                const mockLoginFn = jest.fn();
+                const mockRegisterFn = jest.fn();
+                wrapper = mount(<LoginRegisterForm loginSubmissionFn={mockLoginFn} registerSubmissionFn={mockRegisterFn}/>)
+                const form = wrapper.find("form");
+                form.simulate("submit");
+                expect(mockLoginFn).toHaveBeenCalled();
+                expect(mockLoginFn).lastCalledWith("","");
+                expect(mockRegisterFn).not.toHaveBeenCalled();
+            });
+
+            it("Checks state", () => {
+                const mockLoginFn = jest.fn();
+                wrapper = mount(<LoginRegisterForm loginSubmissionFn={mockLoginFn} />);
+                const form = wrapper.find("form");
+                const emailField = wrapper.find("#emailGroup input[type='email']");
+                const passwordField = wrapper.find("#passwordGroup input[type='password']");
+                
+                // check if email and password fields exists
+                expect(emailField.exists()).toBeTruthy();
+                expect(passwordField.exists()).toBeTruthy();
+                // get the state before submission
+                let state:ILoginRegisterFormState = wrapper.state();
+                // check the state before submission
+                expect(state.email).toEqual("");
+                expect(state.password).toEqual("");
+                expect(state.confirmPassword).toEqual("");
+
+                wrapper.setState({ email: "test@test.it", password: "test" });
+
+                //submit the login form
+                form.simulate("submit");
+                expect(mockLoginFn).toBeCalled();
+                expect(mockLoginFn).lastCalledWith("test@test.it", "test");
+
+                // after sumbission the state must be cleared
+                form.simulate("submit");
+                expect(state.email).toEqual("");
+                expect(state.password).toEqual("");
+                expect(state.confirmPassword).toEqual("");
+            });
         });
+        
+        describe("RegisterForm", () => {
+            it("Checks the registerSubmissionFn function call", () => {
+                const mockLoginFn = jest.fn();
+                const mockRegisterFn = jest.fn();
+                wrapper = mount(<LoginRegisterForm loginSubmissionFn={mockLoginFn} registerSubmissionFn={mockRegisterFn}/>)
+                const form = wrapper.find("form");
+                const switchFormLink = wrapper.find("a.switch-form-link");
+                switchFormLink.simulate("click");
+                form.simulate("submit");
+                expect(mockLoginFn).not.toHaveBeenCalled();
+                expect(mockRegisterFn).toHaveBeenCalled();
+                expect(mockRegisterFn).lastCalledWith("","","");
+            });
+
+            it("Checks the state", () => {
+                const mockRegisterFn = jest.fn();
+                wrapper = mount(<LoginRegisterForm registerSubmissionFn={mockRegisterFn} />);
+                const state:ILoginRegisterFormState = wrapper.state();
+                const switchFormLink = wrapper.find("a.switch-form-link");
+                expect(switchFormLink.exists()).toBeTruthy();
+                // switch the form to display the register form
+                switchFormLink.simulate("click");
+
+                const form = wrapper.find("form");
+                const emailField = wrapper.find("#emailGroup input[type='email']");
+                const passwordField = wrapper.find("#passwordGroup input[type='password']");
+                const confirmPasswordField = wrapper.find("#confirmPasswordGroup input[type='password']");
+
+                expect(form.exists()).toBeTruthy();
+                expect(emailField.exists()).toBeTruthy();
+                expect(passwordField.exists()).toBeTruthy();
+                expect(confirmPasswordField.exists()).toBeTruthy();
+
+                // check the state before submission
+                expect(state.email).toEqual("");
+                expect(state.password).toEqual("");
+                expect(state.confirmPassword).toEqual("");
+
+                // change the state
+                wrapper.setState({ email: "test@test.it", password: "testPassword", confirmPassword: "testConfirmPassword" });
+
+                // submit the form
+                form.simulate("submit");
+
+                // check the register function
+                expect(mockRegisterFn).toHaveBeenCalled();
+                expect(mockRegisterFn).toBeCalledWith("test@test.it", "testPassword", "testConfirmPassword");
+
+                // after the submission the state must be cleared
+                expect(state.email).toEqual("");
+                expect(state.password).toEqual("");
+                expect(state.confirmPassword).toEqual("");
+            });
+        });
+        
     });
 });
