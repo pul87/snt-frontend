@@ -1,12 +1,14 @@
 import * as React from "react";
 import { Component } from "react";
 import { connect } from "react-redux";
+import * as actions from "../../actions";
 
 import LoginRegisterForm from "../../components/forms/LoginRegisterForm";
 import { FormattedMessage, injectIntl } from "react-intl";
 
 interface ILoginRegisterFormConnectedProps {
     intl?: any;
+    logIn?(email, password);
 }
 
 /**
@@ -24,15 +26,10 @@ class LoginRegisterFormConnected extends Component<ILoginRegisterFormConnectedPr
         const rememberMeText = formatMessage({ id: "login-register.remember-me" });
         const confirmPasswordText = formatMessage({ id: "login-register.confirm-password" });
         const submitLoginFn = (email, password) => {
-            alert(`Login: ${email}, ${password}`);
-            return {
-                success: true,
-                data: null
-            };
+            this.props.logIn(email, password);
         };
         const submitRegisterFn = (email, password, confirmPassword ) => {
             alert(`Register ${email}, ${password} and ${confirmPassword}`);
-            return { success: true, data: null };
         };
 
         return ( <LoginRegisterForm
@@ -49,4 +46,4 @@ class LoginRegisterFormConnected extends Component<ILoginRegisterFormConnectedPr
 
 }
 
-export default connect()(injectIntl(LoginRegisterFormConnected));
+export default connect(null, { logIn: actions.logIn })(injectIntl(LoginRegisterFormConnected));

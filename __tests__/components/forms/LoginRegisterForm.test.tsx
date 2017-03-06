@@ -92,6 +92,12 @@ describe("LoginRegisterForm", () => {
             expect(password.exists()).toBeTruthy();
             expect(password).toHaveLength(1);
         });
+
+        it("Check the checkbox", () => {
+            const checkbox = wrapper.find({ type: "checkbox" });
+            expect(checkbox.exists()).toBeTruthy();
+            expect(checkbox).toHaveLength(1);
+        });
     });
 
     describe("Register form", () => {

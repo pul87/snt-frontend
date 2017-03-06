@@ -19,12 +19,21 @@ export interface ILoginRegisterProps {
     submitRegisterText?: string;
     loginTitle?: string;
     registerTitle?: string;
-    loginSubmissionFn?( email, password ): { success: boolean; data: any; };
-    registerSubmissionFn?( email, password, confirmPassword ): { success: boolean; data: any; };
+    loginSubmissionFn?( email, password ): void;
+    registerSubmissionFn?( email, password, confirmPassword ): void;
 }
 
 class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFormState> {
 
+    constructor(props: ILoginRegisterProps) {
+        super(props);
+
+        this.state = { showLogin: true, email: "", password: "", confirmPassword: "" };
+    }
+
+    /**
+     * Default props
+     */
     static get defaultProps(): ILoginRegisterProps {
         return {
             emailText: "Email",
@@ -39,30 +48,18 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
             loginSubmissionFn: (email, password) => {
                 console.log("Unimplemented LoginFn");
                 console.log(email, password);
-
-                return {
-                    success: true,
-                    data: { email, password},
-                };
             },
             registerSubmissionFn: (email, password, confirmPassword) => {
                 console.log("Unimplemented RegisterFn");
                 console.log(email, password, confirmPassword);
-
-                return {
-                    success: true,
-                    data: { email, password, confirmPassword },
-                };
             },
         };
     }
 
-    constructor(props: ILoginRegisterProps) {
-        super(props);
-
-        this.state = { showLogin: true, email: "", password: "", confirmPassword: "" };
-    }
-
+    /**
+     * If isLogin === true => Login form else Register Form
+     * @param isLogin
+     */
     getForm(isLogin: boolean) {
 
         const labelSize = 12 - this.props.controlSize;
@@ -118,18 +115,35 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
         );
     }
 
+    /**
+     * On input email change set the new state.
+     * @param e
+     */
     onEmailChange(e) {
         this.setState({ email: e.target.value });
     }
 
+    /**
+     * On input password change set the new state.
+     * @param e
+     */
     onPasswordChange(e) {
         this.setState({ password: e.target.value });
     }
 
+    /**
+     * On confirm password change set the new state.
+     * @param e 
+     */
     onConfirmPasswordChange(e) {
         this.setState({ confirmPassword: e.target.value });
     }
 
+    /**
+     * On submit form call the proper callback function provided
+     * and clear the state.
+     * @param e 
+     */
     onSubmitForm(e) {
         e.preventDefault();
         const { email, password, confirmPassword } = this.state;
@@ -141,6 +155,10 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
         this.setState({email: "", password: "", confirmPassword: ""});
     }
 
+    /**
+     * Toggle the form from Login to Register
+     * @param e 
+     */
     onChangeFormClick(e) {
         e.preventDefault();
         this.setState({ showLogin: !this.state.showLogin });
