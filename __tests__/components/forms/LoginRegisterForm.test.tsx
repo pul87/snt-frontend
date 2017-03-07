@@ -133,9 +133,10 @@ describe("LoginRegisterForm", () => {
                 const mockRegisterFn = jest.fn();
                 wrapper = mount(<LoginRegisterForm loginSubmissionFn={mockLoginFn} registerSubmissionFn={mockRegisterFn}/>)
                 const form = wrapper.find("form");
+                wrapper.setState({ email: "test@test.it", password: "test"});
                 form.simulate("submit");
                 expect(mockLoginFn).toHaveBeenCalled();
-                expect(mockLoginFn).lastCalledWith("","");
+                expect(mockLoginFn).lastCalledWith("test@test.it","test");
                 expect(mockRegisterFn).not.toHaveBeenCalled();
             });
 
@@ -169,9 +170,66 @@ describe("LoginRegisterForm", () => {
                 expect(state.password).toEqual("");
                 expect(state.confirmPassword).toEqual("");
             });
+
+            describe('Validation', () => {
+                it('Check blank fields', () => {
+                    const mockLoginFn = jest.fn();
+                    const mockRegisterFn = jest.fn();
+                    wrapper = mount(<LoginRegisterForm loginSubmissionFn={mockLoginFn} registerSubmissionFn={mockRegisterFn} />);
+                    const form = wrapper.find("form");
+                    const { email, password, validation } = wrapper.state();
+                    expect(email).toEqual("");
+                    expect(password).toEqual("");
+                    expect(validation.email).toEqual(null);
+                    expect(validation.password).toEqual(null);
+                    form.simulate("submit");
+                    expect(wrapper.state().validation.email).toEqual("error");
+                    expect(wrapper.state().validation.password).toEqual("error");
+                    expect(mockLoginFn).not.toHaveBeenCalled();
+                    expect(mockRegisterFn).not.toHaveBeenCalled();
+                });
+
+                it('Check blank email', () => {
+                    const mockLoginFn = jest.fn();
+                    const mockRegisterFn = jest.fn();
+                    wrapper = mount(<LoginRegisterForm loginSubmissionFn={mockLoginFn} registerSubmissionFn={mockRegisterFn} />);
+                    const form = wrapper.find("form");
+                    const { email, password, validation } = wrapper.state();
+                    expect(email).toEqual("");
+                    expect(password).toEqual("");
+                    expect(validation.email).toEqual(null);
+                    expect(validation.password).toEqual(null);
+                    wrapper.setState({ password: "password" });
+                    form.simulate("submit");
+                    expect(wrapper.state().validation.email).toEqual("error");
+                    expect(wrapper.state().validation.password).toEqual(null);
+                    expect(mockLoginFn).not.toHaveBeenCalled();
+                    expect(mockRegisterFn).not.toHaveBeenCalled();
+                });
+
+                it('Check blank password', () => {
+                    const mockLoginFn = jest.fn();
+                    const mockRegisterFn = jest.fn();
+                    wrapper = mount(<LoginRegisterForm loginSubmissionFn={mockLoginFn} registerSubmissionFn={mockRegisterFn} />);
+                    const form = wrapper.find("form");
+                    const { email, password, validation } = wrapper.state();
+                    expect(email).toEqual("");
+                    expect(password).toEqual("");
+                    expect(validation.email).toEqual(null);
+                    expect(validation.password).toEqual(null);
+                    wrapper.setState({ email: "test@test.it" });
+                    form.simulate("submit");
+                    expect(wrapper.state().validation.email).toEqual(null);
+                    expect(wrapper.state().validation.password).toEqual("error");
+                    expect(mockLoginFn).not.toHaveBeenCalled();
+                    expect(mockRegisterFn).not.toHaveBeenCalled();
+                });
+            });
         });
         
         describe("RegisterForm", () => {
+
+            
             it("Checks the registerSubmissionFn function call", () => {
                 const mockLoginFn = jest.fn();
                 const mockRegisterFn = jest.fn();
@@ -179,10 +237,11 @@ describe("LoginRegisterForm", () => {
                 const form = wrapper.find("form");
                 const switchFormLink = wrapper.find("a.switch-form-link");
                 switchFormLink.simulate("click");
+                wrapper.setState({ email: "test@test.it", password: "test", confirmPassword: "test"});
                 form.simulate("submit");
                 expect(mockLoginFn).not.toHaveBeenCalled();
                 expect(mockRegisterFn).toHaveBeenCalled();
-                expect(mockRegisterFn).lastCalledWith("","","");
+                expect(mockRegisterFn).lastCalledWith("test@test.it","test","test");
             });
 
             it("Checks the state", () => {
@@ -203,26 +262,118 @@ describe("LoginRegisterForm", () => {
                 expect(emailField.exists()).toBeTruthy();
                 expect(passwordField.exists()).toBeTruthy();
                 expect(confirmPasswordField.exists()).toBeTruthy();
-
+                
                 // check the state before submission
                 expect(state.email).toEqual("");
                 expect(state.password).toEqual("");
                 expect(state.confirmPassword).toEqual("");
-
+                
                 // change the state
-                wrapper.setState({ email: "test@test.it", password: "testPassword", confirmPassword: "testConfirmPassword" });
+                wrapper.setState({ email: "test@test.it", password: "testPassword", confirmPassword: "testPassword" });
 
                 // submit the form
                 form.simulate("submit");
-
+                
                 // check the register function
                 expect(mockRegisterFn).toHaveBeenCalled();
-                expect(mockRegisterFn).toBeCalledWith("test@test.it", "testPassword", "testConfirmPassword");
-
+                expect(mockRegisterFn).toBeCalledWith("test@test.it", "testPassword", "testPassword");
+                
                 // after the submission the state must be cleared
                 expect(state.email).toEqual("");
                 expect(state.password).toEqual("");
                 expect(state.confirmPassword).toEqual("");
+
+            });
+
+            describe('Validation', () => {
+                
+                it('Check blank fields', () => {
+                    const mockLoginFn = jest.fn();
+                    const mockRegisterFn = jest.fn();
+                    wrapper = mount(<LoginRegisterForm loginSubmissionFn={mockLoginFn} registerSubmissionFn={mockRegisterFn} />);
+                    const form = wrapper.find("form");
+                    const { email, password, confirmPassword, validation } = wrapper.state();
+                    // switch to register form
+                    wrapper.setState({ showLogin: false });
+                    expect(email).toEqual("");
+                    expect(password).toEqual("");
+                    expect(confirmPassword).toEqual("");
+                    expect(validation.email).toEqual(null);
+                    expect(validation.password).toEqual(null);
+                    expect(validation.confirmPassword).toEqual(null);
+                    form.simulate("submit");
+                    expect(wrapper.state().validation.email).toEqual("error");
+                    expect(wrapper.state().validation.password).toEqual("error");
+                    expect(wrapper.state().validation.confirmPassword).toEqual("error");
+                    expect(mockLoginFn).not.toHaveBeenCalled();
+                    expect(mockRegisterFn).not.toHaveBeenCalled();
+                });
+
+                it('Check blank email', () => {
+                    const mockLoginFn = jest.fn();
+                    const mockRegisterFn = jest.fn();
+                    wrapper = mount(<LoginRegisterForm loginSubmissionFn={mockLoginFn} registerSubmissionFn={mockRegisterFn} />);
+                    const form = wrapper.find("form");
+                    const { email, password, confirmPassword, validation } = wrapper.state();
+                    wrapper.setState({ showLogin: false });
+                    expect(email).toEqual("");
+                    expect(password).toEqual("");
+                    expect(confirmPassword).toEqual("");
+                    expect(validation.email).toEqual(null);
+                    expect(validation.password).toEqual(null);
+                    expect(validation.confirmPassword).toEqual(null);
+                    wrapper.setState({ password: "password", confirmPassword: "password" });
+                    form.simulate("submit");
+                    expect(wrapper.state().validation.email).toEqual("error");
+                    expect(wrapper.state().validation.password).toEqual(null);
+                    expect(wrapper.state().validation.password).toEqual(null);
+                    expect(mockLoginFn).not.toHaveBeenCalled();
+                    expect(mockRegisterFn).not.toHaveBeenCalled();
+                });
+
+                it('Check blank password', () => {
+                    const mockLoginFn = jest.fn();
+                    const mockRegisterFn = jest.fn();
+                    wrapper = mount(<LoginRegisterForm loginSubmissionFn={mockLoginFn} registerSubmissionFn={mockRegisterFn} />);
+                    const form = wrapper.find("form");
+                    const { email, password, confirmPassword, validation } = wrapper.state();
+                    wrapper.setState({ showLogin: false});
+                    expect(email).toEqual("");
+                    expect(password).toEqual("");
+                    expect(confirmPassword).toEqual("");
+                    expect(validation.email).toEqual(null);
+                    expect(validation.password).toEqual(null);
+                    expect(validation.confirmPassword).toEqual(null);
+                    wrapper.setState({ email: "test@test.it" });
+                    form.simulate("submit");
+                    expect(wrapper.state().validation.email).toEqual(null);
+                    expect(wrapper.state().validation.password).toEqual("error");
+                    expect(wrapper.state().validation.confirmPassword).toEqual("error");
+                    expect(mockLoginFn).not.toHaveBeenCalled();
+                    expect(mockRegisterFn).not.toHaveBeenCalled();
+                });
+
+                it('Invalid confirmPassword', () => {
+                    const mockLoginFn = jest.fn();
+                    const mockRegisterFn = jest.fn();
+                    wrapper = mount(<LoginRegisterForm loginSubmissionFn={mockLoginFn} registerSubmissionFn={mockRegisterFn} />);
+                    const form = wrapper.find("form");
+                    const { email, password, confirmPassword, validation } = wrapper.state();
+                    wrapper.setState({ showLogin: false});
+                    expect(email).toEqual("");
+                    expect(password).toEqual("");
+                    expect(confirmPassword).toEqual("");
+                    expect(validation.email).toEqual(null);
+                    expect(validation.password).toEqual(null);
+                    expect(validation.confirmPassword).toEqual(null);
+                    wrapper.setState({ email: "test@test.it", password: "test", confirmPassword: "wrong confirm" });
+                    form.simulate("submit");
+                    expect(wrapper.state().validation.email).toEqual(null);
+                    expect(wrapper.state().validation.password).toEqual(null);
+                    expect(wrapper.state().validation.confirmPassword).toEqual("error");
+                    expect(mockLoginFn).not.toHaveBeenCalled();
+                    expect(mockRegisterFn).not.toHaveBeenCalled();
+                });
             });
         });
         

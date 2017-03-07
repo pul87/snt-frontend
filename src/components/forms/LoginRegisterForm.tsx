@@ -2,11 +2,18 @@ import * as React from "react";
 import { Component } from "react";
 import { FormGroup, FormControl, ControlLabel, HelpBlock, Panel, Row, Form, Col, Checkbox, Button } from "react-bootstrap";
 
+export interface ILoginRegisterFormValidation {
+    email: "error" | "success" | "warning" | null | undefined;
+    password: "error" | "success" | "warning" | null | undefined;
+    confirmPassword: "error" | "success" | "warning" | null | undefined;
+}
+
 export interface ILoginRegisterFormState {
     showLogin: boolean;
     email: string;
     password: string;
     confirmPassword: string;
+    validation: ILoginRegisterFormValidation;
 }
 
 export interface ILoginRegisterProps {
@@ -21,6 +28,7 @@ export interface ILoginRegisterProps {
     registerTitle?: string;
     loginSubmissionFn?( email, password ): void;
     registerSubmissionFn?( email, password, confirmPassword ): void;
+    validationFn?(isLogin:boolean, email:string, password:string, confirmPassword:string):ILoginRegisterFormValidation;
 }
 
 class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFormState> {
@@ -28,7 +36,17 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
     constructor(props: ILoginRegisterProps) {
         super(props);
 
-        this.state = { showLogin: true, email: "", password: "", confirmPassword: "" };
+        this.state = { 
+            showLogin: true, 
+            email: "", 
+            password: "", 
+            confirmPassword: "",
+            validation: {
+                email: null,
+                password: null,
+                confirmPassword: null,
+            }
+        };
     }
 
     /**
@@ -53,7 +71,36 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
                 console.log("Unimplemented RegisterFn");
                 console.log(email, password, confirmPassword);
             },
+            validationFn: ( isLogin, email, password, confirmPassword ) => {
+
+                const validation:ILoginRegisterFormValidation = {
+                    email: null,
+                    password: null,
+                    confirmPassword: null,
+                };
+
+                if ( !email ) {
+                    validation.email = "error";
+                }
+
+                if ( !password ) {
+                    validation.password = "error";
+                }
+
+                // Is submitting a registration form
+                if ( !isLogin ) {
+                    if ( ! confirmPassword || ( password !== confirmPassword ) ) {
+                        validation.confirmPassword = "error";
+                    }
+                }
+
+                return validation;
+            }
+
+            
         };
+
+        
     }
 
     /**
@@ -67,7 +114,7 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
         const submitButtonText = isLogin ? this.props.submitLoginText : this.props.submitRegisterText;
 
         const confirmPassword = ! isLogin ? (
-            <FormGroup controlId="confirmPasswordGroup">
+            <FormGroup controlId="confirmPasswordGroup" validationState={this.state.validation.confirmPassword}>
                 <Col componentClass={ControlLabel} sm={labelSize}>
                     <span className="confirm-password-text">{this.props.confirmPasswordText}</span>
                 </Col>
@@ -83,7 +130,7 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
 
         return (
             <Form horizontal onSubmit={this.onSubmitForm.bind(this)}>
-                <FormGroup controlId="emailGroup">
+                <FormGroup controlId="emailGroup" validationState={this.state.validation.email}>
                     <Col componentClass={ControlLabel} sm={labelSize}>
                         <span className="email-text">{this.props.emailText}</span>
                     </Col>
@@ -91,7 +138,7 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
                         <FormControl type="email" placeholder={this.props.emailText} value={this.state.email} onChange={this.onEmailChange.bind(this)}/>
                     </Col>
                 </FormGroup>
-                <FormGroup controlId="passwordGroup">
+                <FormGroup controlId="passwordGroup" validationState={this.state.validation.password}>
                     <Col componentClass={ControlLabel} sm={labelSize}>
                         <span className="password-text">{this.props.passwordText}</span>
                     </Col>
@@ -120,7 +167,7 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
      * @param e
      */
     onEmailChange(e) {
-        this.setState({ email: e.target.value });
+        this.setState({ email: e.target.value, validation: { ...this.state.validation, email: null } });
     }
 
     /**
@@ -128,7 +175,7 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
      * @param e
      */
     onPasswordChange(e) {
-        this.setState({ password: e.target.value });
+        this.setState({ password: e.target.value, validation: { ...this.state.validation, password: null } });
     }
 
     /**
@@ -136,7 +183,41 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
      * @param e 
      */
     onConfirmPasswordChange(e) {
-        this.setState({ confirmPassword: e.target.value });
+        this.setState({ confirmPassword: e.target.value, validation: { ...this.state.validation, confirmPassword: null } });
+    }
+
+    resetState(){
+        this.setState({
+            showLogin: true,
+            email: "",
+            password: "",
+            confirmPassword: "",
+            validation: {
+                email: null,
+                password: null,
+                confirmPassword: null,
+            }
+        });
+    }
+
+    resetValidation() {
+        this.setState({
+            validation: {
+                email: null,
+                password: null,
+                confirmPassword: null,
+            }
+        });
+    }
+
+    isValid():boolean {
+        
+        const { email, password, confirmPassword } = this.state;
+        const isLogin = this.state.showLogin;
+        const validation = this.props.validationFn(isLogin, email, password, confirmPassword);
+        this.setState({ validation });
+
+        return Object.keys(validation).filter( key => { return validation[key] === "error" }).length === 0;
     }
 
     /**
@@ -147,12 +228,15 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
     onSubmitForm(e) {
         e.preventDefault();
         const { email, password, confirmPassword } = this.state;
-        if ( this.state.showLogin )
-            this.props.loginSubmissionFn( email, password);
-        else
-            this.props.registerSubmissionFn(email, password, confirmPassword);
 
-        this.setState({email: "", password: "", confirmPassword: ""});
+        if ( this.isValid() ) {
+            if ( this.state.showLogin )
+                this.props.loginSubmissionFn( email, password);
+            else
+                this.props.registerSubmissionFn(email, password, confirmPassword);
+
+            this.resetState();
+        }
     }
 
     /**
@@ -162,6 +246,7 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
     onChangeFormClick(e) {
         e.preventDefault();
         this.setState({ showLogin: !this.state.showLogin });
+        this.resetValidation();
     }
 
     render() {
