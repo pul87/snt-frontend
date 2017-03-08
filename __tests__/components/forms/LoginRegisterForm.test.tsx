@@ -241,7 +241,7 @@ describe("LoginRegisterForm", () => {
                 form.simulate("submit");
                 expect(mockLoginFn).not.toHaveBeenCalled();
                 expect(mockRegisterFn).toHaveBeenCalled();
-                expect(mockRegisterFn).lastCalledWith("test@test.it","test","test");
+                expect(mockRegisterFn).lastCalledWith("test@test.it","test");
             });
 
             it("Checks the state", () => {
@@ -276,7 +276,7 @@ describe("LoginRegisterForm", () => {
                 
                 // check the register function
                 expect(mockRegisterFn).toHaveBeenCalled();
-                expect(mockRegisterFn).toBeCalledWith("test@test.it", "testPassword", "testPassword");
+                expect(mockRegisterFn).toBeCalledWith("test@test.it", "testPassword");
                 
                 // after the submission the state must be cleared
                 expect(state.email).toEqual("");

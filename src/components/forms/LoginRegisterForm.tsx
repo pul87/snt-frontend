@@ -27,7 +27,7 @@ export interface ILoginRegisterProps {
     loginTitle?: string;
     registerTitle?: string;
     loginSubmissionFn?( email, password ): void;
-    registerSubmissionFn?( email, password, confirmPassword ): void;
+    registerSubmissionFn?( email, password ): void;
     validationFn?(isLogin:boolean, email:string, password:string, confirmPassword:string):ILoginRegisterFormValidation;
 }
 
@@ -67,9 +67,9 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
                 console.log("Unimplemented LoginFn");
                 console.log(email, password);
             },
-            registerSubmissionFn: (email, password, confirmPassword) => {
+            registerSubmissionFn: (email, password) => {
                 console.log("Unimplemented RegisterFn");
-                console.log(email, password, confirmPassword);
+                console.log(email, password);
             },
             validationFn: ( isLogin, email, password, confirmPassword ) => {
 
@@ -233,7 +233,7 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
             if ( this.state.showLogin )
                 this.props.loginSubmissionFn( email, password);
             else
-                this.props.registerSubmissionFn(email, password, confirmPassword);
+                this.props.registerSubmissionFn(email, password);
 
             this.resetState();
         }
