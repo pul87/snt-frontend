@@ -20,13 +20,18 @@ export interface ILoginRegisterFormValidation {
     confirmPassword: "error" | "success" | "warning" | null | undefined;
 }
 
+export interface ILoginRegisterMessage {
+    type: "info"|"success"|"warning"|"danger"|null|undefined;
+    text: string;
+}
+
 export interface ILoginRegisterFormState {
     showLogin: boolean;
     email: string;
     password: string;
     confirmPassword: string;
     validation: ILoginRegisterFormValidation;
-    message: { type:any; text: string };
+    message: ILoginRegisterMessage;
 }
 
 export interface ILoginRegisterProps {
@@ -42,7 +47,7 @@ export interface ILoginRegisterProps {
     loginSubmissionFn?( email, password ): void;
     registerSubmissionFn?( email, password ): void;
     validationFn?(isLogin: boolean, email: string, password: string, confirmPassword: string):ILoginRegisterFormValidation;
-    message?: { type: "info"|"success"|"warning"|"danger"|null|undefined, text: string };
+    message?: ILoginRegisterMessage;
 }
 
 class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFormState> {
@@ -61,8 +66,8 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
                 confirmPassword: null,
             },
             message: {
-                type: this.props.message.type,
-                text: this.props.message.text,
+                type: null,
+                text: null,
             }
         };
     }
@@ -118,9 +123,14 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
                 type: null,
                 text: null,
             }
-        };
+        };   
+    }
 
-        
+    componentWillReceiveProps( { message }  ) {
+
+        if ( message.type !== this.state.message.type ) {
+            this.setState( { message });
+        }
     }
 
     /**
@@ -132,7 +142,7 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
         const labelSize = 12 - this.props.controlSize;
         const controlSize = this.props.controlSize;
         const submitButtonText = isLogin ? this.props.submitLoginText : this.props.submitRegisterText;
-        const showAlert = this.props.message.type ? true : false;
+        const showAlert = this.state.message.type ? true : false;
 
         const confirmPassword = ! isLogin ? (
             <FormGroup controlId="confirmPasswordGroup" validationState={this.state.validation.confirmPassword}>
@@ -150,8 +160,8 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
         ) : null;
 
         const alert = showAlert ? (
-            <Alert bsStyle={this.props.message.type} style={{ margin: 3 }} >
-                { this.props.message.text }
+            <Alert bsStyle={this.state.message.type} style={{ margin: 3 }} >
+                { this.state.message.text }
             </Alert>) : null;
 
         return (
@@ -233,6 +243,15 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
                 email: null,
                 password: null,
                 confirmPassword: null,
+            },
+        });
+    }
+
+    resetMessage() {
+        this.setState({
+            message: {
+                type: null,
+                text: null,
             }
         });
     }
@@ -273,6 +292,7 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
         e.preventDefault();
         this.setState({ showLogin: !this.state.showLogin });
         this.resetValidation();
+        this.resetMessage();
     }
 
     render() {

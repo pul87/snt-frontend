@@ -3,7 +3,7 @@ import { Component } from "react";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
 
-import LoginRegisterForm from "../../components/forms/LoginRegisterForm";
+import LoginRegisterForm, { ILoginRegisterMessage } from "../../components/forms/LoginRegisterForm";
 import { FormattedMessage, injectIntl } from "react-intl";
 
 interface ILoginRegisterFormConnectedProps {
@@ -11,23 +11,34 @@ interface ILoginRegisterFormConnectedProps {
     logIn?(email, password);
 }
 
+interface ILoginRegisterFormConnectedState {
+    message: ILoginRegisterMessage;
+}
+
 /**
  * Connected version of LoginRegisterForm component
  */
-class LoginRegisterFormConnected extends Component<ILoginRegisterFormConnectedProps, undefined> {
+class LoginRegisterFormConnected extends Component<ILoginRegisterFormConnectedProps, ILoginRegisterFormConnectedState> {
 
     /**
      * Render the LoginRegisterFormConnected with localization
      */
 
-     changeMess():{ type:"danger", text: string} {
+    constructor(props) {
+        super(props);
+        this.state = { message: { type: null, text: null }};
 
+        setTimeout(() => {
+            this.changeMess({ type: "danger", text: "Email o password errati!"});
+        }, 1000);
 
-            return {
-                type: "danger",
-                text: "azz!!!",
-            } ;
-         
+        setTimeout(() => {
+            this.changeMess({ type: "success", text: "Boh"});
+        }, 3000);
+    }
+
+     changeMess( message: ILoginRegisterMessage) {
+        this.setState({ message });         
      };
 
     render() {
@@ -53,7 +64,7 @@ class LoginRegisterFormConnected extends Component<ILoginRegisterFormConnectedPr
             confirmPasswordText={confirmPasswordText}
             loginSubmissionFn={submitLoginFn}
             registerSubmissionFn={submitRegisterFn}
-            message={this.changeMess()}
+            message={this.state.message}
         /> );
     }
 

@@ -389,19 +389,18 @@ describe("LoginRegisterForm", () => {
             expect(props.message.text).toBeNull();
         });
 
-        it('Check the default message type and text', () => {
+        it('Check the custom message type and text', () => {
             let message = { type: null, text: null };
-            let wrapper = mount(<LoginRegisterForm message={message} />);
+            wrapper = mount(<LoginRegisterForm message={message} />);
             const props = wrapper.props();
             let alert = wrapper.find('div.alert');
             expect(alert.exists()).toBeFalsy();
-            expect(props.message.type).toBeNull();
-            expect(props.message.text).toBeNull();
             message.type = "info";
             message.text = "Messaggio informativo";
-            expect(props.message.type).toEqual("info")
-            expect(props.message.text).toEqual("Messaggio informativo");
-            alert = wrapper.find('div.alert');
+            wrapper.setState( { message: { type: message.type, text: message.text }});
+            alert = wrapper.find("div.alert");
+            alert.hasClass("alert-info");
+            expect(alert.text()).toEqual(message.text);
             expect(alert.exists()).toBeTruthy();
         });
 
