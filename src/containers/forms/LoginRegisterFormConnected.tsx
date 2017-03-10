@@ -19,6 +19,17 @@ class LoginRegisterFormConnected extends Component<ILoginRegisterFormConnectedPr
     /**
      * Render the LoginRegisterFormConnected with localization
      */
+
+     changeMess():{ type:"danger", text: string} {
+
+
+            return {
+                type: "danger",
+                text: "azz!!!",
+            } ;
+         
+     };
+
     render() {
         const { formatMessage } = this.props.intl;
         const loginText = formatMessage({ id: "login-register.login" });
@@ -28,10 +39,11 @@ class LoginRegisterFormConnected extends Component<ILoginRegisterFormConnectedPr
         const submitLoginFn = (email, password) => {
             this.props.logIn(email, password);
         };
-        const submitRegisterFn = (email, password, confirmPassword ) => {
-            alert(`Register ${email}, ${password} and ${confirmPassword}`);
+        const submitRegisterFn = (email, password ) => {
+            alert(`Register ${email}, ${password}`);
         };
 
+        
         return ( <LoginRegisterForm
             loginTitle={loginText}
             registerTitle={registerText}
@@ -41,6 +53,7 @@ class LoginRegisterFormConnected extends Component<ILoginRegisterFormConnectedPr
             confirmPasswordText={confirmPasswordText}
             loginSubmissionFn={submitLoginFn}
             registerSubmissionFn={submitRegisterFn}
+            message={this.changeMess()}
         /> );
     }
 

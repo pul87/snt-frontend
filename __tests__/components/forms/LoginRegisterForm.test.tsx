@@ -378,4 +378,32 @@ describe("LoginRegisterForm", () => {
         });
         
     });
+
+    describe('Message Box', () => {
+
+        it('Check the default message type and text', () => {
+            const props = wrapper.props();
+            const alert = wrapper.find('div.alert');
+            expect(alert.exists()).toBeFalsy();
+            expect(props.message.type).toBeNull();
+            expect(props.message.text).toBeNull();
+        });
+
+        it('Check the default message type and text', () => {
+            let message = { type: null, text: null };
+            let wrapper = mount(<LoginRegisterForm message={message} />);
+            const props = wrapper.props();
+            let alert = wrapper.find('div.alert');
+            expect(alert.exists()).toBeFalsy();
+            expect(props.message.type).toBeNull();
+            expect(props.message.text).toBeNull();
+            message.type = "info";
+            message.text = "Messaggio informativo";
+            expect(props.message.type).toEqual("info")
+            expect(props.message.text).toEqual("Messaggio informativo");
+            alert = wrapper.find('div.alert');
+            expect(alert.exists()).toBeTruthy();
+        });
+
+    });
 });

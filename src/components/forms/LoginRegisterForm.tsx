@@ -1,6 +1,18 @@
 import * as React from "react";
 import { Component } from "react";
-import { FormGroup, FormControl, ControlLabel, HelpBlock, Panel, Row, Form, Col, Checkbox, Button } from "react-bootstrap";
+import { 
+    FormGroup, 
+    FormControl, 
+    ControlLabel, 
+    HelpBlock, 
+    Panel, 
+    Row, 
+    Form, 
+    Col, 
+    Checkbox, 
+    Button,
+    Alert,
+} from "react-bootstrap";
 
 export interface ILoginRegisterFormValidation {
     email: "error" | "success" | "warning" | null | undefined;
@@ -14,6 +26,7 @@ export interface ILoginRegisterFormState {
     password: string;
     confirmPassword: string;
     validation: ILoginRegisterFormValidation;
+    message: { type:any; text: string };
 }
 
 export interface ILoginRegisterProps {
@@ -28,7 +41,8 @@ export interface ILoginRegisterProps {
     registerTitle?: string;
     loginSubmissionFn?( email, password ): void;
     registerSubmissionFn?( email, password ): void;
-    validationFn?(isLogin:boolean, email:string, password:string, confirmPassword:string):ILoginRegisterFormValidation;
+    validationFn?(isLogin: boolean, email: string, password: string, confirmPassword: string):ILoginRegisterFormValidation;
+    message?: { type: "info"|"success"|"warning"|"danger"|null|undefined, text: string };
 }
 
 class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFormState> {
@@ -45,6 +59,10 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
                 email: null,
                 password: null,
                 confirmPassword: null,
+            },
+            message: {
+                type: this.props.message.type,
+                text: this.props.message.text,
             }
         };
     }
@@ -95,9 +113,11 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
                 }
 
                 return validation;
+            },
+            message: {
+                type: null,
+                text: null,
             }
-
-            
         };
 
         
@@ -112,6 +132,7 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
         const labelSize = 12 - this.props.controlSize;
         const controlSize = this.props.controlSize;
         const submitButtonText = isLogin ? this.props.submitLoginText : this.props.submitRegisterText;
+        const showAlert = this.props.message.type ? true : false;
 
         const confirmPassword = ! isLogin ? (
             <FormGroup controlId="confirmPasswordGroup" validationState={this.state.validation.confirmPassword}>
@@ -127,6 +148,11 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
         const rememberMe = isLogin ? (
             <Checkbox>{this.props.rememberMeText}</Checkbox>
         ) : null;
+
+        const alert = showAlert ? (
+            <Alert bsStyle={this.props.message.type} style={{ margin: 3 }} >
+                { this.props.message.text }
+            </Alert>) : null;
 
         return (
             <Form horizontal onSubmit={this.onSubmitForm.bind(this)}>
@@ -158,6 +184,7 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
                         </Button>
                     </Col>
                 </FormGroup>
+                { alert }
             </Form>
         );
     }
@@ -234,7 +261,6 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
                 this.props.loginSubmissionFn( email, password);
             else
                 this.props.registerSubmissionFn(email, password);
-
             this.resetState();
         }
     }
