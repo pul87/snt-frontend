@@ -3,9 +3,12 @@ import {render} from "react-dom";
 import {AppContainer} from "react-hot-loader";
 import App from "./components/App";
 import { createStore, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
 import reducers from "./reducers";
 import { Router, browserHistory } from "react-router";
 import routes from "./config/routes";
+
+import { INITIAL_STATE } from "./state";
 
 // Locale
 import * as LocaleUtil from "./utils/Locale";
@@ -17,25 +20,14 @@ import * as en from "react-intl/locale-data/en";
 // Main style
 require("!style-loader!css-loader!sass-loader!./sass/main.scss");
 
-// Try full locale, try locale without region code, fallback to 'en'
-const { locale, messages } = LocaleUtil.getMessagesByCurrentLocale();
-
 addLocaleData([
     ...it,
     ...en
 ]);
 
-const initialState = {
-    intl: {
-        defaultLocale: "it",
-        locale,
-        messages
-    }
-};
-
 const rootEl = document.getElementById("root");
-const createStoreWithMiddleware = applyMiddleware()(createStore);
-const store = createStoreWithMiddleware(reducers, initialState);
+const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
+const store = createStoreWithMiddleware(reducers, INITIAL_STATE);
 
 render(
     renderApp(App),

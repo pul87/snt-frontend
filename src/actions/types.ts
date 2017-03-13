@@ -1,4 +1,6 @@
 // Authentication
 export const enum AUTH {
-    LOG_IN
+    LOG_IN,
+    UNAUTHORIZED,
+    LOADING,
 };

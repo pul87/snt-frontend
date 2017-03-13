@@ -27,7 +27,6 @@ describe("LoginRegisterForm", () => {
             expect(wrapperProps.loginTitle).toEqual("Login");
             expect(wrapperProps.passwordText).toEqual("Password");
             expect(wrapperProps.registerTitle).toEqual("Register");
-            expect(wrapperProps.rememberMeText).toEqual("Remember me");
             expect(wrapperProps.submitLoginText).toEqual("Login");
             expect(wrapperProps.submitRegisterText).toEqual("Register");
         });
@@ -41,7 +40,6 @@ describe("LoginRegisterForm", () => {
                 emailText="myEmailText"
                 passwordText="myPasswordText"
                 registerTitle="myRegisterTitle"
-                rememberMeText="myRememberMeText"
                 submitLoginText="mySubmitLoginText"
                 submitRegisterText="mySubmitRegisterText"
             />);
@@ -54,7 +52,6 @@ describe("LoginRegisterForm", () => {
             expect(wrapperProps.loginTitle).toEqual("myLoginTitle");
             expect(wrapperProps.passwordText).toEqual("myPasswordText");
             expect(wrapperProps.registerTitle).toEqual("myRegisterTitle");
-            expect(wrapperProps.rememberMeText).toEqual("myRememberMeText");
             expect(wrapperProps.submitLoginText).toEqual("mySubmitLoginText");
             expect(wrapperProps.submitRegisterText).toEqual("mySubmitRegisterText");
         });
@@ -78,6 +75,7 @@ describe("LoginRegisterForm", () => {
         it("Checks the submit button", () => {
             const submit = wrapper.find("button[type='submit']");
             expect(submit).toHaveLength(1);
+            expect(submit.hasClass("submit-button")).toBeTruthy();
             expect(submit.text()).toEqual("Login");
         });
 
@@ -91,12 +89,6 @@ describe("LoginRegisterForm", () => {
             const password = wrapper.find({ type: "password" });
             expect(password.exists()).toBeTruthy();
             expect(password).toHaveLength(1);
-        });
-
-        it("Check the checkbox", () => {
-            const checkbox = wrapper.find({ type: "checkbox" });
-            expect(checkbox.exists()).toBeTruthy();
-            expect(checkbox).toHaveLength(1);
         });
     });
 

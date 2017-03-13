@@ -3,6 +3,7 @@ const {resolve}       = require("path");
 const {CheckerPlugin} = require("awesome-typescript-loader")
 const StyleLintPlugin = require("stylelint-webpack-plugin");
 const fs              = require("fs");
+const bodyParser      = require("body-parser");
 
 module.exports = {
     resolve: {
@@ -28,8 +29,8 @@ module.exports = {
         contentBase: resolve(__dirname, "public"), // match the output path
         publicPath:  "/", // match the output `publicPath`,
         historyApiFallback: true,
-        /*
         setup: function(app){
+            /*
             app.get('/', function(req, res){
                 fs.readFile(resolve(__dirname,"public","index_frontier.html"),"utf8", function(err, file){
                     if (err) {
@@ -38,8 +39,24 @@ module.exports = {
                         res.send(file);
                     }
                 });
-            })
-        }*/
+            })*/
+
+            app.use(bodyParser.json());
+
+            app.post('/api/user/login', function(req, res){
+
+                console.log(req.body);
+                const { email, password, agent } = req.body;
+
+                if ( email === "test@test.it" && password === "test" ) {
+                    res.status(200).json({
+                        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZ2VudCI6IndlYiIsInVzZXJfaWQiOiI1OGJmMzg0YzU4MzQyYTVmNzdjZTg3OWMiLCJ0aW1lc3RhbXAiOiIyMDE3LTAzLTA3VDIyOjUxOjIzLjYxOFoiLCJpYXQiOjE0ODg5MjcwODMsImV4cCI6MTQ4OTEwNzA4M30.t83rm8KOVRJUlP3TEHWDCWYRaEUuXwQYyDTg1v5CAnE"
+                    });
+                } else {
+                    res.status(401).send("Unauthorized");
+                }
+            });
+        }
     },
 
     module: {

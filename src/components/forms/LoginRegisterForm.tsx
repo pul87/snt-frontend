@@ -39,7 +39,6 @@ export interface ILoginRegisterProps {
     emailText?: string;
     passwordText?: string;
     confirmPasswordText?: string;
-    rememberMeText?: string;
     submitLoginText?: string;
     submitRegisterText?: string;
     loginTitle?: string;
@@ -80,7 +79,6 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
             emailText: "Email",
             passwordText: "Password",
             confirmPasswordText: "Confirm password",
-            rememberMeText: "Remember me",
             submitLoginText: "Login",
             submitRegisterText: "Register",
             controlSize: 9,
@@ -155,10 +153,6 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
             </FormGroup>
         ) : null;
 
-        const rememberMe = isLogin ? (
-            <Checkbox>{this.props.rememberMeText}</Checkbox>
-        ) : null;
-
         const alert = showAlert ? (
             <Alert bsStyle={this.state.message.type} style={{ margin: 3 }} >
                 { this.state.message.text }
@@ -184,13 +178,10 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
                 </FormGroup>
                 
                 { confirmPassword }
-                <FormGroup>
-                    <Col smOffset={1} sm={4}>
-                        {rememberMe}
-                    </Col>
-                    <Col smOffset={1} sm={5}>
-                        <Button type="submit">
-                            <span className="submit-register-text">{ submitButtonText }</span>
+                <FormGroup className="submit-group">
+                    <Col sm={4} >
+                        <Button type="submit" className="submit-button">
+                            <span className="submit-button-text">{ submitButtonText }</span>
                         </Button>
                     </Col>
                 </FormGroup>
@@ -233,7 +224,7 @@ class LoginRegisterForm extends Component<ILoginRegisterProps, ILoginRegisterFor
                 email: null,
                 password: null,
                 confirmPassword: null,
-            }
+            },
         });
     }
 
