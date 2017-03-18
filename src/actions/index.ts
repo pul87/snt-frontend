@@ -24,7 +24,7 @@ export function logIn(email, password) {
 
         const request = axios.post(LOGIN_URL, payload);
 
-        request.then(( { status, data } ) => {
+        return request.then(( { status, data } ) => {
 
             if ( status === 200 ) {
                 // Save token to localStorage
@@ -41,7 +41,7 @@ export function logIn(email, password) {
             }
         })
         .catch( ( { response: { data, status } } ) => {
-            
+
             if ( status === 401 ) {
                 dispatch({
                     type: AUTH.UNAUTHORIZED,
