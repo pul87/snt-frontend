@@ -1,0 +1,27 @@
+.profile {
+  border-radius: $snt-border-radius;
+
+  .profile-header-image {
+    background-color: $snt-nice-blue;
+    height: 100px;
+    border-radius: $snt-border-radius;
+  }
+
+  .profile-picture {
+    text-align: center !important;
+    margin-top: -50px;
+
+    img {
+      max-width: 100px;
+      border-radius: 100%;
+      border: 3px solid #fff;
+    }
+  }
+
+  .profile-body {
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-align: center !important;
+    margin-bottom: 5px;
+    font-size: 1.4rem;
+  }
+}

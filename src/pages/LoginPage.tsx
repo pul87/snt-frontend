@@ -1,6 +1,8 @@
+// imports
 import * as React from "react";
 import { Component } from "react";
 import { Grid, Row, Col, Clearfix } from "react-bootstrap";
+// locale
 import { FormattedNumber, FormattedMessage, FormattedHTMLMessage } from "react-intl";
 import { ILocaleStrings }from "../locale";
 

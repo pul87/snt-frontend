@@ -5,13 +5,12 @@ import { Route, IndexRoute } from "react-router";
 import App from "../components/App";
 // pages
 import LoginPage from "../pages/LoginPage";
-import Home from "../pages/Home";
+import HomePage from "../pages/HomePage";
 
 export default (
     <Route path="/" component={App}>
         <Route path="login" component={LoginPage} />
-        <Route path="app" component={Home}>
-
+        <Route path="app" component={HomePage}>
         </Route>
     </Route>
 );
