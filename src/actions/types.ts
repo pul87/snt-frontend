@@ -4,3 +4,8 @@ export const enum AUTH {
     UNAUTHORIZED,
     LOADING,
 };
+
+// Profile
+export const enum PROFILE {
+    LOADED
+}

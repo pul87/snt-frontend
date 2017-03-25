@@ -5,12 +5,21 @@ import { Grid, Row, Col } from "react-bootstrap";
 // components
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import Profile from "../components/Profile";
+import ProfileConnected from "../containers/ProfileConnected";
 import Actions from "../components/Actions";
 import Feed from "../components/Feed";
 import WidgetList from "../components/WidgetList";
 
-class Home extends Component<undefined, undefined> {
+class Home extends Component<undefined, { isLoading: boolean }> {
+
+    constructor(props) {
+        super(props);
+        this.state = { isLoading: true };
+        
+        setTimeout(() => {
+            this.setState({ isLoading: false });
+        }, 3000);
+    }
 
     render() {
         return (
@@ -26,7 +35,9 @@ class Home extends Component<undefined, undefined> {
                         <Row>
                             {           /* BODY */          }
                             <Col sm={3}>
-                                <Row><Profile/></Row>
+                                <Row>
+                                    <ProfileConnected />
+                                </Row>
                                 <Row><Actions/></Row>
                             </Col>
                             <Col sm={5}>

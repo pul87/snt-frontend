@@ -11,6 +11,9 @@ const CONFIG = {
         TOKEN: {
             TOKEN_NAME: "sntToken",
         },
+    },
+    PLACE_HOLDERS: {
+        COLOR: "#f0f0f0",
     }
 };
 

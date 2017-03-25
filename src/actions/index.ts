@@ -1,7 +1,8 @@
 import axios from "axios";
 import { browserHistory } from "react-router";
 import CONFIG from "../../config/global";
-import { AUTH } from "./types";
+import { AUTH, PROFILE } from "./types";
+import { IProfile } from "../components/Profile";
 
 const LOGIN_ROUTE = "/user/login";
 
@@ -49,5 +50,30 @@ export function logIn(email, password) {
                 });
             }
         });
+    };
+}
+
+
+// GET PROFILE INFO
+
+export function getProfile() {
+
+    const payload:IProfile = { 
+        displayName:"Paolo B.", 
+        profileId: 1, 
+        text: "CTO snt.", 
+        loaded: true,
+        imgUrl: "https://avatars1.githubusercontent.com/u/1782549?v=3&u=537d985304941b6cc05bd0870fd557ac97e330e0&s=400",
+        profileUrl: "https://github.com/pul87",
+    }; 
+
+    return ( dispatch ) => {
+
+        setTimeout(() => {
+            dispatch({
+                type: PROFILE.LOADED,
+                payload
+            });
+        }, 500);
     };
 }

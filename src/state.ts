@@ -1,6 +1,7 @@
 import * as LocaleUtil from "./utils/Locale";
-import { ILoginRegisterMessage } from "./components/forms/LoginRegisterForm";
 const { locale, messages } = LocaleUtil.getMessagesByCurrentLocale();
+
+import { IProfile } from "./components/Profile";
 
 export interface IApplicationState {
     intl: {
@@ -13,6 +14,7 @@ export interface IApplicationState {
         messageId: string,
         loading: boolean,
     },
+    profile: IProfile
 };
 
 export const INITIAL_STATE:IApplicationState = {
@@ -25,5 +27,12 @@ export const INITIAL_STATE:IApplicationState = {
         authenticated: false,
         messageId: null,
         loading: false,
+    },
+    profile: {
+        profileUrl: null,
+        displayName: null,
+        profileId: null,
+        text: null,
+        loaded: false,
     }
 };
