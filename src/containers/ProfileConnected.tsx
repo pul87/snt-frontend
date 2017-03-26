@@ -38,7 +38,6 @@ class ProfileConnected extends Component<IProfileConnectedProps, undefined> {
 };
 
 function mapStateToProps( { profile }:IApplicationState ) {
-    debugger
     return {
         profile
     };

@@ -9,6 +9,7 @@ import ProfileConnected from "../containers/ProfileConnected";
 import Actions from "../components/Actions";
 import Feed from "../components/Feed";
 import WidgetList from "../components/WidgetList";
+import BaseLayout from "../components/layout/BaseLayout";
 
 class Home extends Component<undefined, { isLoading: boolean }> {
 
@@ -24,16 +25,9 @@ class Home extends Component<undefined, { isLoading: boolean }> {
     render() {
         return (
             <div className="home-page">
-                <Grid fluid={true} >
-                    <Row>
-                        {          /* HEADER */         }
-                        <Col>
-                            <Header/>
-                        </Col>
-                    </Row>
+                <BaseLayout>
                     <Grid>
                         <Row>
-                            {           /* BODY */          }
                             <Col sm={3}>
                                 <Row>
                                     <ProfileConnected />
@@ -48,11 +42,7 @@ class Home extends Component<undefined, { isLoading: boolean }> {
                             </Col>
                         </Row>
                     </Grid>
-                    <Row>
-                        {          /* FOOTER */         }
-                        <Footer/>
-                    </Row>
-                </Grid>
+                </BaseLayout>
             </div>
         );
     }

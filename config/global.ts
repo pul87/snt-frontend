@@ -7,7 +7,10 @@ const CONFIG = {
         },
     },
     APP: {
-        LOGGED_ROUTE: "/app",
+        ROUTES: {
+            LOGGED_ROUTE: "/app/home",
+            PROFILE_ROUTE: "/app/profile"
+        },
         TOKEN: {
             TOKEN_NAME: "sntToken",
         },

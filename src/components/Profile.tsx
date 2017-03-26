@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Component, PropTypes } from "react";
 import { Grid, Row, Col, Panel } from "react-bootstrap";
+import { browserHistory } from "react-router";
 
 export interface IProfile {
     imgUrl?: string;
@@ -8,12 +9,12 @@ export interface IProfile {
     profileId?: number;
     displayName?: string;
     text?: string;
-    loaded: boolean;
+    loaded?: boolean;
 }
 
 class Profile extends Component<IProfile, undefined> {
 
-    defaultProps():IProfile {
+    static get defaultProps():IProfile {
         return {
             imgUrl: null,
             profileUrl: null,
@@ -22,6 +23,11 @@ class Profile extends Component<IProfile, undefined> {
             text: null,
             loaded: false,
         };
+    }
+
+    onProfileClick(e) {
+        e.preventDefault();
+        browserHistory.push(this.props.profileUrl);
     }
 
     render() {
@@ -37,9 +43,9 @@ class Profile extends Component<IProfile, undefined> {
                     </div>
                     <div className="profile-body">
                         <div className="profile-name">
-                            <a href={profileUrl}>{displayName}</a>
+                            <a href={profileUrl} onClick={this.onProfileClick.bind(this)} >{displayName}</a>
                         </div>
-                        <div className="profile-description">
+                        <div className="profile-text">
                             <small>{text}</small>
                         </div>
                     </div>

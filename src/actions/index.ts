@@ -3,6 +3,7 @@ import { browserHistory } from "react-router";
 import CONFIG from "../../config/global";
 import { AUTH, PROFILE } from "./types";
 import { IProfile } from "../components/Profile";
+import { IApplicationState } from "../state";
 
 const LOGIN_ROUTE = "/user/login";
 
@@ -38,7 +39,7 @@ export function logIn(email, password) {
                 });
 
                 // Redirect to the logged application route
-                browserHistory.push(CONFIG.APP.LOGGED_ROUTE);
+                browserHistory.push(CONFIG.APP.ROUTES.LOGGED_ROUTE);
             }
         })
         .catch( ( { response: { data, status } } ) => {
@@ -64,16 +65,26 @@ export function getProfile() {
         text: "CTO snt.", 
         loaded: true,
         imgUrl: "https://avatars1.githubusercontent.com/u/1782549?v=3&u=537d985304941b6cc05bd0870fd557ac97e330e0&s=400",
-        profileUrl: "https://github.com/pul87",
+        profileUrl: CONFIG.APP.ROUTES.PROFILE_ROUTE,
     }; 
 
-    return ( dispatch ) => {
+    return ( dispatch, getState ) => {
+        
+        const { profile }:IApplicationState = getState();
 
-        setTimeout(() => {
+        if ( profile.loaded ) {
             dispatch({
                 type: PROFILE.LOADED,
-                payload
+                payload: profile
             });
-        }, 500);
+        } else {
+            setTimeout(() => {
+                dispatch({
+                    type: PROFILE.LOADED,
+                    payload
+                });
+            }, 500);
+        }
+        
     };
 }
