@@ -43,9 +43,8 @@ module.exports = {
 
             app.use(bodyParser.json());
 
-            app.post('/api/user/login', function(req, res){
+            app.post('/api/user/login', function(req, res) {
 
-                console.log(req.body);
                 const { email, password, agent } = req.body;
 
                 if ( email === "test@test.it" && password === "test" ) {
@@ -55,6 +54,14 @@ module.exports = {
                 } else {
                     res.status(401).send("Unauthorized");
                 }
+            });
+
+            app.get('/api/auth/profile', function(req, res){
+                res.status(200).json({
+                    displayName: 'Paolo B.',
+                    description: 'CTO snt.',
+                    creationDate: new Date()
+                });
             });
         }
     },
