@@ -41,7 +41,7 @@ describe('Actions', () => {
 
                 moxios.stubRequest(LOGIN_URL, {
                     status: 200,
-                    response: { token: "ssa8d7y8hb2uk3oyu14bhj4d" }
+                    response: { token: "ssa8d7y8hb2uk3oyu14bhj4d", user: { displayName: 'pul'} }
                 });
                 
                 return store.dispatch(actions.logIn("test@test.it", "test"))

@@ -14,7 +14,7 @@ export interface IApplicationState {
         messageId: string,
         loading: boolean,
     },
-    profile: IProfile
+    profile: IProfile,
 };
 
 export const INITIAL_STATE:IApplicationState = {
@@ -34,5 +34,5 @@ export const INITIAL_STATE:IApplicationState = {
         profileId: null,
         text: null,
         loaded: false,
-    }
+    },
 };

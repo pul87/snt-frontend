@@ -41,27 +41,31 @@ module.exports = {
                 });
             })*/
 
+            var user = {
+                displayName: 'Paolo B.',
+                description: 'snt....',
+                creationDate: new Date(),
+                userId: 1,
+            };
+
             app.use(bodyParser.json());
 
             app.post('/api/user/login', function(req, res) {
-
+                
                 const { email, password, agent } = req.body;
-
+                
                 if ( email === "test@test.it" && password === "test" ) {
                     res.status(200).json({
-                        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZ2VudCI6IndlYiIsInVzZXJfaWQiOiI1OGJmMzg0YzU4MzQyYTVmNzdjZTg3OWMiLCJ0aW1lc3RhbXAiOiIyMDE3LTAzLTA3VDIyOjUxOjIzLjYxOFoiLCJpYXQiOjE0ODg5MjcwODMsImV4cCI6MTQ4OTEwNzA4M30.t83rm8KOVRJUlP3TEHWDCWYRaEUuXwQYyDTg1v5CAnE"
+                        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZ2VudCI6IndlYiIsInVzZXJfaWQiOiI1OGJmMzg0YzU4MzQyYTVmNzdjZTg3OWMiLCJ0aW1lc3RhbXAiOiIyMDE3LTAzLTA3VDIyOjUxOjIzLjYxOFoiLCJpYXQiOjE0ODg5MjcwODMsImV4cCI6MTQ4OTEwNzA4M30.t83rm8KOVRJUlP3TEHWDCWYRaEUuXwQYyDTg1v5CAnE",
+                        user: user,
                     });
                 } else {
                     res.status(401).send("Unauthorized");
                 }
             });
 
-            app.get('/api/auth/profile', function(req, res){
-                res.status(200).json({
-                    displayName: 'Paolo B.',
-                    description: 'CTO snt.',
-                    creationDate: new Date()
-                });
+            app.get('/api/auth/profile', function(req, res) {
+                res.status(200).json(user);
             });
         }
     },

@@ -1,6 +1,8 @@
 import { AUTH } from "../actions/types";
 import * as APP_STATE from "../state";
 
+import { IProfile } from "../components/Profile";
+
 export default ( state=APP_STATE.INITIAL_STATE.auth, action ) => {
 
     switch ( action.type ) {

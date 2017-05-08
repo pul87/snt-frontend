@@ -28,6 +28,14 @@ export function logIn(email, password) {
 
         return request.then(( { status, data } ) => {
 
+            const { user } = data;
+
+            const profile:IProfile = {
+                displayName: user.displayName,
+                profileId: user.userId,
+                text: user.description,
+            };
+
             if ( status === 200 ) {
                 // Save token to localStorage
                 localStorage.setItem(CONFIG.APP.TOKEN.TOKEN_NAME, data.token);
@@ -38,13 +46,18 @@ export function logIn(email, password) {
                     payload: null,
                 });
 
+                dispatch({
+                    type: PROFILE.LOADED,
+                    payload: profile
+                });
+
                 // Redirect to the logged application route
                 browserHistory.push(CONFIG.APP.ROUTES.LOGGED_ROUTE);
             }
         })
-        .catch( ( { response: { data, status } } ) => {
+        .catch( ( { response } ) => {
 
-            if ( status === 401 ) {
+            if ( response.status === 401 ) {
                 dispatch({
                     type: AUTH.UNAUTHORIZED,
                     payload: "login-register.login.unauthorized",
